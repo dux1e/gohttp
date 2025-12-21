@@ -16,12 +16,43 @@ func main() {
 	// fmt.Println(helloPointer)
 	// fmt.Println(*helloPointer)
 
-	peopleURL := getSwapiRespone().People
-	swapiPeople := getSwapiPeople(peopleURL)
-	for _, people := range swapiPeople {
-		fmt.Println(people.Name)
-	}
+	// peopleURL := getSwapiRespone().People
+	// swapiPeople := getSwapiPeople(peopleURL)
+	// for _, people := range swapiPeople {
+	// 	fmt.Println(people.Name)
+	// }
 	// fmt.Println(swapiPeople[0].Name)
+
+	// Print all data from a file
+	// This snippet takes all data from a file
+	// and loads it into memory
+	data, err := os.ReadFile("./README.md")
+	if err != nil {
+		slog.Error("Couldn't read file", "err", err)
+	}
+	fmt.Println(string(data))
+
+	// This snippet takes 1024 bytes of data and loads in into memory at a time
+	file, err := os.Open("./README.md")
+	if err != nil {
+		panic(err)
+	}
+	defer file.Close()
+
+	buffer := make([]byte, 1024)
+	for {
+		n, err := file.Read(buffer)
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			fmt.Println(err)
+			continue
+		}
+		if n > 0 {
+			fmt.Println(string(buffer[:n]))
+		}
+	}
 }
 
 func getSwapiRespone() SwapiResponse {
